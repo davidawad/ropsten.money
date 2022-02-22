@@ -4,8 +4,7 @@ import Web3 from "web3";
 
 const EthereumTx = require("ethereumjs-tx").Transaction;
 
-const ethNetwork = process.env.ALCHEMY_ROPSTEN_URL;
-const web3 = new Web3(new Web3.providers.HttpProvider(ethNetwork));
+const web3 = new Web3(new Web3.providers.HttpProvider(process.env.ALCHEMY_ROPSTEN_URL));
 
 const chainToId = {
   mainnet: 1,
@@ -16,6 +15,8 @@ const chainToId = {
 };
 
 export const transferFunds = async (sendersData, recieverData, amountToSend) => {
+  let network = "ropsten";
+
   return new Promise(async (resolve, reject) => {
     var nonce = await web3.eth.getTransactionCount(sendersData.address);
 
@@ -41,13 +42,13 @@ export const transferFunds = async (sendersData, recieverData, amountToSend) => 
         gas: 21000,
         gasPrice: gasPrices.low * 1000000000,
         nonce: nonce,
-        chainId: chainToId["ropsten"], // EIP 155 chainId - mainnet: 1, rinkeby: 4
+        chainId: chainToId[network], // EIP 155 chainId - mainnet: 1, rinkeby: 4
       };
 
       logger.info("Sending transaction");
       logger.info(details);
 
-      const transaction = new EthereumTx(details, { chain: "ropsten" });
+      const transaction = new EthereumTx(details, { chain: network });
 
       logger.info("using private key " + sendersData.privateKey);
 
@@ -58,15 +59,23 @@ export const transferFunds = async (sendersData, recieverData, amountToSend) => 
       transaction.sign(privKey);
 
       logger.info("serializing transaction");
+
       const serializedTransaction = transaction.serialize();
 
-      web3.eth.sendSignedTransaction("0x" + serializedTransaction.toString("hex"), (err, id) => {
+      const signedTransactionString = "0x" + serializedTransaction.toString("hex");
+
+      web3.eth.sendSignedTransaction(signedTransactionString, (err, id) => {
+        const etherscanURL = `https://${network}.etherscan.io/tx/${id}`;
+        logger.info(etherscanURL);
+
         if (err) {
           logger.error(err);
           return reject();
         }
 
-        resolve({ id: id, link: process.env.ALCHEMY_ROPSTEN_URL });
+        const ret = { id: id, link: etherscanURL };
+
+        resolve(ret);
       });
     });
   });

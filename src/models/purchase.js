@@ -13,6 +13,8 @@ export const processPurchase = async (addr, amount) => {
   const sourceAddr = { address: process.env.PUBLIC_KEY, privateKey: process.env.PRIVATE_KEY };
   const destAddr = { address: addr };
 
+  logger.info(`Transferring ${amount} ETH from ${sourceAddr.address} to ${destAddr.address}`);
+
   ret = await transferFunds(sourceAddr, destAddr, amount);
   return ret;
 };
