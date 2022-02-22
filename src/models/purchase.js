@@ -1,6 +1,3 @@
-// import logger from "../utils/logger";
-// TODO import
-
 import logger from "../utils/logger";
 import { transferFunds } from "../utils/sendRopsten";
 
