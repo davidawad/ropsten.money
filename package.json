@@ -8,11 +8,12 @@
     "build-babel": "babel -d ./dist ./src -s",
     "build": "npm run clean && npm run build-babel",
     "dev": "nodemon --exec babel-node src/index.js",
+    "start": "npm run build && node dist/index.js",
     "send": "npm run build && node dist/scripts/sendCrypto.js",
     "sendrEth": "npm run build && node dist/scripts/sendCrypto.js",
     "test": "npm run sendrEth"
   },
-  "author": "bhozin",
+  "author": "david awad",
   "license": "UNLICENSED",
   "private": true,
   "dependencies": {
