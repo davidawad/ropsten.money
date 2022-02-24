@@ -39,12 +39,12 @@ router.post("/", async (req, res) => {
     return res.status(400).send("Bad Request");
   }
 
-  if (!isAddress(addr)) {
-    logger.error(`Request rejected. ${req.body.addr} is not a valid address`);
-    return res.status(400).send("Bad Request");
-  }
+  // if (!isAddress(addr)) {
+  //   logger.error(`Request rejected. ${addr} is not a valid address`);
+  //   return res.status(400).send("Bad Request");
+  // }
 
-  if (parseFloat(req.body.amount) <= 0) {
+  if (parseFloat(amount) <= 0) {
     logger.error("Request rejected. invalid amount");
     return res.status(400).send("Bad Request");
   }
