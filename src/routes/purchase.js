@@ -8,27 +8,38 @@ const router = Router();
 const DEFAULT_AMOUNT = 0.001;
 
 router.post("/", async (req, res) => {
-  logger.info("NEW PURCHASE REQUEST");
+  logger.info(`Request from ${req.headers.origin}`);
 
   logger.info(req.body);
 
+  let addr = req.body["Your (rETH) address"];
+  let amount = req.body.quantity || DEFAULT_AMOUNT; // TODO default sample amount
+
+  logger.info(`Purchase to wallet ${addr} for ${amount} (rETH)`);
+
   if (process.env.NODE_ENV === "production") {
     // check that the request is coming from the correct origin
-    // if (req.headers.origin !== "https://cash.app") {
-    //   return res.status(403).send("Forbidden");
-    // }
-
-    if (req.body.pw !== process.env.PASSWORD) {
+    if (req.headers.origin !== "https://gumroad.com") {
       return res.status(403).send("Forbidden");
     }
+
+    // verify gumroad seller id as a loose password
+    if (req.body["seller_id"] !== process.env.GUMROAD_SELLER_ID) {
+      return res.status(403).send("Forbidden");
+    }
+
+    // verify password
+    // if (req.body.pw !== process.env.PASSWORD) {
+    //   return res.status(403).send("Forbidden");
+    // }
   }
 
-  if (!req.body.addr) {
-    logger.error("Request rejected. no address provided");
+  if (!addr) {
+    logger.error("Request rejected. No address provided");
     return res.status(400).send("Bad Request");
   }
 
-  if (!isAddress(req.body.addr)) {
+  if (!isAddress(addr)) {
     logger.error(`Request rejected. ${req.body.addr} is not a valid address`);
     return res.status(400).send("Bad Request");
   }
@@ -37,13 +48,6 @@ router.post("/", async (req, res) => {
     logger.error("Request rejected. invalid amount");
     return res.status(400).send("Bad Request");
   }
-
-  // validate the purchase with a temporary password
-
-  // wallet to send the address to
-  let pw = req.body.pw;
-  let addr = req.body.addr;
-  let amount = req.body.amount || DEFAULT_AMOUNT; // TODO default sample amount
 
   logger.info(`Processing purchase of ${amount} (r)ETH by ${addr}`);
 

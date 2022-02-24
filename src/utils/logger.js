@@ -1,9 +1,9 @@
 // USAGE:
-// Logger.error("This is an error log");
-// Logger.warn("This is a warn log");
-// Logger.info("This is a info log");
-// Logger.http("This is a http log");
-// Logger.debug("This is a debug log");
+// logger.error("This is an error log");
+// logger.warn("This is a warn log");
+// logger.info("This is a info log");
+// logger.http("This is a http log");
+// logger.debug("This is a debug log");
 
 var winston = require("winston");
 
