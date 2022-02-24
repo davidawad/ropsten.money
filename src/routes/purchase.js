@@ -1,8 +1,7 @@
 import { Router } from "express";
+import web3 from "web3";
 import logger from "../utils/logger";
 import { processPurchase } from "../models/purchase";
-import { isAddress } from "../utils/ethAddrValidators";
-import web3 from "web3";
 
 const router = Router();
 
@@ -54,14 +53,6 @@ router.post("/", async (req, res) => {
   logger.info(`Processing purchase of ${amount} (r)ETH by ${addr}`);
 
   const ret = await processPurchase(addr, amount);
-
-  // if ret === 1 {
-  //   return res.status(200).send("Success");
-  // } else if (ret === 2) {
-  //   return res.status(200).send("Already exists");
-  // } else {
-  //   return res.status(500).send("Error");
-  // }
 
   return res.send(ret);
 });
