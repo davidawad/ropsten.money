@@ -13,7 +13,7 @@ router.post("/", async (req, res) => {
   logger.info(req.body);
 
   let addr = req.body["Your (rETH) address"];
-  let amount = parseFloat(req.body.quantity) || DEFAULT_AMOUNT; // TODO default sample amount
+  let amount = 10; // user bought 10 rETH
 
   logger.info(`Purchase to wallet ${addr} for ${amount} (rETH)`);
 
@@ -29,7 +29,7 @@ router.post("/", async (req, res) => {
     // }
   }
 
-  // verify gumroad seller id as a loose password
+  // verify gumroad seller id as a "loose password"
   if (req.body["seller_id"] !== process.env.GUMROAD_SELLER_ID) {
     logger.error("Request rejected. Seller id not provided");
     return res.status(403).send("Forbidden");

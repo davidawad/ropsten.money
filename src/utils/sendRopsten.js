@@ -36,11 +36,14 @@ export const transferFunds = async (sendersData, recieverData, amountToSend) => 
 
       let gasPrices = await getCurrentGasPrices();
 
+      logger.info("Gas Prices");
+      logger.info(gasPrices);
+
       let details = {
         to: recieverData.address,
         value: web3.utils.toHex(web3.utils.toWei(amountToSend.toString(), "ether")),
         gas: 21000,
-        gasPrice: gasPrices.low * 1000000000,
+        gasPrice: gasPrices.low * 10000000,
         nonce: nonce,
         chainId: chainToId[network], // EIP 155 chainId - mainnet: 1, rinkeby: 4
       };
