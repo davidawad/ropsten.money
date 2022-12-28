@@ -24,7 +24,7 @@ async function main() {
 
     logger.info(`Transferring ${amount} ETH from ${sourceAddr.address} to ${destAddr.address}`);
 
-    // TODO make this dynamic, but for now just do it manually for testing
+    // TODO make this dynamic for ease of use.
     await transferFunds(sourceAddr, destAddr, amount);
   } catch (err) {
     logger.error(err);

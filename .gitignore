@@ -1,7 +1,9 @@
+.vscode/
+
 # build folder
 dist/*
 
-# keep the dist folder 
+# keep the dist folder
 !dist/.gitkeep
 
 # Logs
